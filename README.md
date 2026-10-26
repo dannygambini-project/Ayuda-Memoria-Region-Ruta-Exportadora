@@ -1,37 +1,93 @@
 # Ayuda Memoria Regional 2026 - Ruta Exportadora | PROMPERÚ
 
-Aplicativo web interactivo y panel analítico de la **Ruta Exportadora Regional 2026**, desarrollado para la Subdirección de Desarrollo Exportador de PROMPERÚ.
+Plataforma analítica e interactiva con la **Ayuda Memoria de las atenciones de la Ruta Exportadora a nivel Regional (2026)**, desarrollada para la **Subdirección de Desarrollo Exportador de PROMPERÚ**.
 
-## 🚀 Despliegue Manual
+Consolida la información estratégica de las **25 regiones del Perú** (Amazonas, Áncash, Apurímac, Arequipa, Ayacucho, Cajamarca, Callao, Cusco, Huancavelica, Huánuco, Ica, Junín, La Libertad, Lambayeque, Lima, Loreto, Madre de Dios, Moquegua, Pasco, Piura, Puno, San Martín, Tacna, Tumbes y Ucayali).
 
-Este proyecto es una aplicación web estática autónoma (`Single Page Application`) con todos sus estilos, interactividad y datos consolidados en `index.html`.
+---
+
+## 🌐 Despliegue Manual (Paso a Paso)
+
+El archivo central es `index.html`, una **Single Page Application (SPA)** completamente autónoma que integra la interfaz, estilos, datos de las 25 regiones y la generación de documentos Word (.docx).
 
 ### Opción 1: GitHub Pages (Recomendado)
-1. En este repositorio, ve a la pestaña **Settings** (Configuración).
-2. En el menú lateral izquierdo, haz clic en **Pages**.
-3. En la sección **Build and deployment** > **Source**, selecciona **Deploy from a branch**.
-4. En **Branch**, selecciona `main` y la carpeta `/ (root)`.
-5. Haz clic en **Save**. En unos minutos estará publicado en:
-   `https://dannygambini-project.github.io/Ayuda-Memoria-Region-Ruta-Exportadora/`
+1. Ingresa a la configuración del repositorio en GitHub:
+   `https://github.com/dannygambini-project/Ayuda-Memoria-Region-Ruta-Exportadora/settings/pages`
+2. En la sección **Build and deployment**:
+   - **Source:** `Deploy from a branch`
+   - **Branch:** `main` / carpeta `/ (root)`
+3. Clic en **Save**.
+4. En 1-2 minutos tu aplicación estará publicada en:
+   👉 **`https://dannygambini-project.github.io/Ayuda-Memoria-Region-Ruta-Exportadora/`**
 
-### Opción 2: Vercel / Netlify / Cloudflare Pages
-1. Conecta este repositorio en tu dashboard de Vercel o Netlify.
-2. Directorio raíz: `./` (sin comando de build necesario).
-3. Public directory: `./`
-4. Haz clic en **Deploy**.
+### Opción 2: Vercel
+1. Ingresa a [Vercel](https://vercel.com) e inicia sesión.
+2. Clic en **"Add New..."** > **"Project"**.
+3. Importa el repositorio `Ayuda-Memoria-Region-Ruta-Exportadora`.
+4. Deja la configuración por defecto (Framework Preset: *Other*, Root Directory: `./`).
+5. Clic en **Deploy**.
 
-### Opción 3: Uso Local
-- Simplemente abre el archivo `index.html` con cualquier navegador web moderno (Chrome, Edge, Firefox, Safari). No requiere servidor web ni dependencias externas.
+### Opción 3: Netlify
+1. Ingresa a [Netlify](https://app.netlify.com).
+2. Selecciona **"Add new site"** > **"Import an existing project"**.
+3. Conecta con GitHub y selecciona `Ayuda-Memoria-Region-Ruta-Exportadora`.
+4. Publish directory: `./`
+5. Clic en **Deploy site**.
+
+### Opción 4: Ejecución Local
+- Solo haz doble clic en `index.html` o ábrelo en cualquier navegador (Google Chrome, Microsoft Edge, Mozilla Firefox, Safari).
+- Funciona 100% offline sin necesidad de levantar servidores ni instalar librerías.
 
 ---
 
-## 📊 Características del Aplicativo
-- **Dashboard Interactivo:** Selección inmediata de las 25 regiones del Perú (Amazonas hasta Ucayali).
-- **Indicadores Clave (KPIs):** Empresas atendidas en 2026, empresas exportadoras, montos exportados (FOB USD), principales subsectores y mercados destino.
-- **Narrativa Oficial:** Resumen ejecutivo de gestión y atenciones por sector productivo.
-- **Descarga de Documentos Word (.docx):** Generación y descarga directa e instantánea de la Ayuda Memoria oficial en formato Word para cada región.
-- **Vista de Impresión / PDF:** Formato optimizado para impresión ejecutiva o guardado en PDF de alta fidelidad.
-- **Matriz Comparativa Regional:** Modal con tabla consolidada de las 25 regiones y sus métricas principales.
+## 📈 Características Principales
+
+1. **Dashboard Regional Interactivo:**
+   - Selector rápido y dropdown alfabético con las 25 regiones del país.
+   - Búsqueda en tiempo real y visualización instantánea sin recarga.
+
+2. **Métricas Clave de Gestión (KPIs):**
+   - **Empresas Atendidas 2026:** Total de empresas participantes en la Ruta Exportadora.
+   - **Empresas Exportadoras:** Total y porcentaje de efectividad exportadora.
+   - **Monto Exportado (FOB USD):** Cifras oficiales de exportación regional.
+   - **Desglose de Categorización:** Clasificación de empresas (Inicio, Crecimiento, Consolidación).
+   - **Subsectores y Mercados:** Principales partidas, sectores no tradicionales y destinos internacionales.
+
+3. **Narrativa Ejecutiva Oficial:**
+   - Redacción institucional estandarizada para autoridades y misiones técnicas.
+   - Detalle desglosado de atenciones brindadas en 2026.
+
+4. **Generador y Descargador Word (.docx):**
+   - Botón *"Descargar Word"* que genera y descarga en 1 clic el documento oficial editable de la región seleccionada.
+
+5. **Modo Impresión / Exportación a PDF:**
+   - Formato preparado con reglas CSS `@media print` para generar reportes ejecutivos limpios, con membrete y tipografía optimizada.
+
+6. **Matriz Comparativa Nacional:**
+   - Modal interactivo con tabla comparativa de las 25 regiones y sus estadísticas globales.
 
 ---
-© 2026 PROMPERÚ - Subdirección de Desarrollo Exportador.
+
+## 📁 Estructura del Repositorio
+
+| Archivo / Carpeta | Descripción |
+|---|---|
+| `index.html` | **Aplicación principal autónoma** (Frontend, UI, datos y lógica embebida). |
+| `regiones_data.json` | Dataset consolidado en JSON con las 25 regiones, KPIs y documentos en Base64. |
+| `generate_report.py` | Script Python generador de la plantilla HTML interactiva. |
+| `build_data.py` | Script Python procesador de fuentes Excel y generador de `regiones_data.json`. |
+| `ayuda_memoria_region_V3.ipynb` | Cuaderno Jupyter con el análisis exploratorio y pruebas de datos. |
+| `documentos_word/` | Colección de los 25 documentos oficiales `.docx` individuales generados. |
+| `BD EMPRESAS CATEGORIZADAS AL 2025.xlsx` | Base de datos de categorización empresarial. |
+| `EXPORTACIONES 2025.xlsx` | Base de datos oficial de exportaciones regionales. |
+| `base rutex 15.09.2026 - Colab.xlsx` | Registro de atenciones Ruta Exportadora (corte sept. 2026). |
+| `base rutex 20.10.2026 - Colab.xlsx` | Registro de atenciones Ruta Exportadora (corte oct. 2026). |
+| `.nojekyll` | Archivo para deshabilitar Jekyll en GitHub Pages. |
+| `.vercelignore` | Exclusiones para optimización de despliegue en Vercel. |
+
+---
+
+## 🏛️ Créditos Institucionales
+- **Institución:** Comisión de Promoción del Perú para la Exportación y el Turismo (**PROMPERÚ**)
+- **Área:** Subdirección de Desarrollo Exportador (**DPPM**)
+- **Año:** 2026
