@@ -82,6 +82,7 @@ El archivo central es `index.html`, una **Single Page Application (SPA)** comple
 | `EXPORTACIONES 2025.xlsx` | Base de datos oficial de exportaciones regionales. |
 | `base rutex 15.09.2026 - Colab.xlsx` | Registro de atenciones Ruta Exportadora (corte sept. 2026). |
 | `base rutex 20.10.2026 - Colab.xlsx` | Registro de atenciones Ruta Exportadora (corte oct. 2026). |
+| `base rutex 03.11.2026 - Colab.xlsx` | Registro de atenciones Ruta Exportadora (corte nov. 2026). |
 | `.nojekyll` | Archivo para deshabilitar Jekyll en GitHub Pages. |
 | `.vercelignore` | Exclusiones para optimización de despliegue en Vercel. |
 

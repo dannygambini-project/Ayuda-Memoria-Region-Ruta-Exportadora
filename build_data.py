@@ -56,7 +56,7 @@ def create_regional_docx(region_nombre_oficial, anio_actual, parrafo_1, parrafo_
     return doc, buf.getvalue()
 
 print("Cargando bases de datos...")
-df_rutex = pd.read_excel('base rutex 20.10.2026 - Colab.xlsx')
+df_rutex = pd.read_excel('base rutex 03.11.2026 - Colab.xlsx')
 df_rutex['REGION_NORM'] = df_rutex['REGION'].apply(normalizar_texto)
 
 df_exp = pd.read_excel('EXPORTACIONES 2025.xlsx')
