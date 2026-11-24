@@ -4,6 +4,9 @@ import os
 with open('regiones_data.json', encoding='utf-8') as f:
     data_json_str = f.read()
 
+data_obj = json.loads(data_json_str)
+fecha_corte_rutex = data_obj.get('fecha_corte_rutex', '24.11.2026')
+
 html_content = f'''<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -169,6 +172,87 @@ html_content = f'''<!DOCTYPE html>
       align-items: center;
       gap: 0.75rem;
       flex-wrap: wrap;
+    }}
+
+    /* Sync Status Badges */
+    .sync-status-pill {{
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #F0FDF4;
+      border: 1px solid #86EFAC;
+      color: #15803D;
+      padding: 0.45rem 0.95rem;
+      border-radius: var(--radius-full);
+      font-size: 0.8rem;
+      font-weight: 600;
+      box-shadow: 0 1px 3px rgba(22, 101, 52, 0.08);
+      user-select: none;
+      transition: var(--transition-normal);
+    }}
+
+    .sync-status-pill:hover {{
+      background: #DCFCE7;
+      border-color: #4ADE80;
+      box-shadow: 0 2px 6px rgba(22, 101, 52, 0.15);
+    }}
+
+    .sync-check-icon {{
+      width: 18px;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #16A34A;
+      color: #FFFFFF;
+      border-radius: 50%;
+      flex-shrink: 0;
+      box-shadow: 0 1px 3px rgba(22, 163, 74, 0.4);
+    }}
+
+    .sync-check-icon svg {{
+      width: 11px;
+      height: 11px;
+      stroke-width: 3.5;
+    }}
+
+    .sync-pulse-dot {{
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22C55E;
+      display: inline-block;
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+      animation: syncPulse 2s infinite;
+    }}
+
+    @keyframes syncPulse {{
+      0% {{
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+      }}
+      70% {{
+        transform: scale(1);
+        box-shadow: 0 0 0 6px rgba(34, 197, 94, 0);
+      }}
+      100% {{
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+      }}
+    }}
+
+    .gov-sync-badge {{
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      color: #4ADE80;
+      padding: 2px 10px;
+      border-radius: var(--radius-full);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.2px;
     }}
 
     /* Buttons */
@@ -992,7 +1076,10 @@ html_content = f'''<!DOCTYPE html>
       <span class="gov-tag">Uso Oficial</span>
     </div>
     <div class="gov-status">
-      <span>Ruta Exportadora 2026 | Sistema de Inteligencia Regional</span>
+      <div class="gov-sync-badge" title="Base de datos de atenciones actualizada y sincronizada">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        <span>Base RUTEX <strong class="rutex-sync-date">{fecha_corte_rutex}</strong> Sincronizada</span>
+      </div>
     </div>
   </div>
 
@@ -1010,6 +1097,13 @@ html_content = f'''<!DOCTYPE html>
       </div>
 
       <div class="header-actions">
+        <div class="sync-status-pill" title="Última base de datos del RUTEX sincronizada y verificada correctamente">
+          <span class="sync-pulse-dot"></span>
+          <span class="sync-check-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </span>
+          <span>Base RUTEX <strong class="rutex-sync-date">{fecha_corte_rutex}</strong> Sincronizada</span>
+        </div>
         <button class="btn btn-secondary" id="btn-all-regions" title="Ver matriz comparativa nacional">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
           Comparativa Nacional
@@ -1945,6 +2039,12 @@ html_content = f'''<!DOCTYPE html>
       // Initialize on Load
       initRegionSelectors();
       setRegion('amazonas');
+
+      if (REGIONES_DATA.fecha_corte_rutex) {{
+        document.querySelectorAll('.rutex-sync-date').forEach(el => {{
+          el.textContent = REGIONES_DATA.fecha_corte_rutex;
+        }});
+      }}
 
     }})();
   </script>

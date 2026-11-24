@@ -3,6 +3,7 @@ import unicodedata
 import json
 import os
 import io
+import re
 import base64
 from docx import Document
 from docx.shared import Pt
@@ -56,7 +57,11 @@ def create_regional_docx(region_nombre_oficial, anio_actual, parrafo_1, parrafo_
     return doc, buf.getvalue()
 
 print("Cargando bases de datos...")
-df_rutex = pd.read_excel('base rutex 24.11.2026 - Colab.xlsx')
+rutex_file = 'base rutex 24.11.2026 - Colab.xlsx'
+match_fecha = re.search(r'(\d{2}\.\d{2}\.\d{4})', rutex_file)
+fecha_corte_rutex = match_fecha.group(1) if match_fecha else '24.11.2026'
+
+df_rutex = pd.read_excel(rutex_file)
 if 'EVENTO' in df_rutex.columns and 'APEX' in df_rutex.columns:
     sample_evento = set(df_rutex['EVENTO'].dropna().unique())
     if sample_evento == {'Aceptado'} or (len(sample_evento) <= 3 and 'Aceptado' in sample_evento and df_rutex['APEX'].nunique() > 20):
@@ -244,6 +249,8 @@ eventos_totales_peru = int(df_rutex['EVENTO'].dropna().nunique())
 
 output_obj = {
     'anio': anio_actual,
+    'fecha_corte_rutex': fecha_corte_rutex,
+    'archivo_rutex': rutex_file,
     'total_regiones': len(regions_data),
     'regiones': regions_data,
     'regiones_lista': [{'id': k, 'nombre': v['nombre'], 'empresas': v['total_empresas'], 'fob_millones': v['monto_fob_millones']} for k, v in sorted(regions_data.items(), key=lambda x: x[1]['nombre'])]
