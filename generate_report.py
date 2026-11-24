@@ -416,6 +416,26 @@ html_content = f'''<!DOCTYPE html>
       box-shadow: 0 2px 6px rgba(200, 16, 46, 0.3);
     }}
 
+    .region-pill.pill-vraem {{
+      background: #FEF3C7;
+      color: #92400E;
+      border: 1px solid #F59E0B;
+      font-weight: 700;
+    }}
+
+    .region-pill.pill-vraem:hover {{
+      background: #FDE68A;
+      color: #78350F;
+      border-color: #D97706;
+    }}
+
+    .region-pill.pill-vraem.active {{
+      background: #D97706 !important;
+      color: white !important;
+      border-color: #B45309 !important;
+      box-shadow: 0 2px 6px rgba(217, 119, 6, 0.4) !important;
+    }}
+
     /* Main Container */
     main.main-content {{
       max-width: 1440px;
@@ -1436,7 +1456,7 @@ html_content = f'''<!DOCTYPE html>
       <div class="modal-header">
         <div>
           <h3>Matriz Nacional de Regiones - Ruta Exportadora 2026</h3>
-          <p style="font-size: 0.8rem; color: var(--text-muted);">Comparativa de las 25 regiones del Perú</p>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Comparativa de las 25 regiones del Perú y ámbito especial VRAEM</p>
         </div>
         <button class="modal-close" id="btn-close-modal">&times;</button>
       </div>
@@ -1572,18 +1592,26 @@ html_content = f'''<!DOCTYPE html>
         selectRegion.innerHTML = '';
         regionPillsList.innerHTML = '';
 
-        const sortedRegions = Object.values(regionsMap).sort((a, b) => a.nombre.localeCompare(b.nombre));
+        const sortedRegions = Object.values(regionsMap).sort((a, b) => {{
+          if (a.id === 'vraem') return 1;
+          if (b.id === 'vraem') return -1;
+          return a.nombre.localeCompare(b.nombre);
+        }});
 
         sortedRegions.forEach(reg => {{
           // Dropdown option
           const opt = document.createElement('option');
           opt.value = reg.id;
-          opt.textContent = `${{reg.nombre}} (${{reg.total_empresas}} empresas)`;
+          if (reg.id === 'vraem') {{
+            opt.textContent = `VRAEM (${{reg.total_empresas}} empresas - Ayacucho, Cusco, Junín, Huancavelica, Apurímac)`;
+          }} else {{
+            opt.textContent = `${{reg.nombre}} (${{reg.total_empresas}} empresas)`;
+          }}
           selectRegion.appendChild(opt);
 
           // Pill button
           const pill = document.createElement('button');
-          pill.className = 'region-pill';
+          pill.className = reg.id === 'vraem' ? 'region-pill pill-vraem' : 'region-pill';
           pill.dataset.id = reg.id;
           pill.textContent = reg.nombre;
           pill.addEventListener('click', () => setRegion(reg.id));
@@ -1617,7 +1645,7 @@ html_content = f'''<!DOCTYPE html>
       // Render Region Data
       function renderRegionData(reg) {{
         // Titles and Narrative
-        const titleText = `Ayuda memoria de las atenciones de la Ruta Exportadora en ${{reg.nombre}} ${{reg.anio}}`;
+        const titleText = reg.titulo_documento || `Ayuda memoria de las atenciones de la Ruta Exportadora en ${{reg.nombre}} ${{reg.anio}}`;
         memoTitle.textContent = titleText;
         memoNarrative.innerHTML = formatNarrativeHTML(reg.parrafo_narrativa, reg);
 
@@ -1824,16 +1852,22 @@ html_content = f'''<!DOCTYPE html>
         tableAllRegionsBody.innerHTML = '';
         const normFilter = filterText.toLowerCase().trim();
 
-        const sorted = Object.values(regionsMap).sort((a, b) => a.nombre.localeCompare(b.nombre));
+        const sorted = Object.values(regionsMap).sort((a, b) => {{
+          if (a.id === 'vraem') return 1;
+          if (b.id === 'vraem') return -1;
+          return a.nombre.localeCompare(b.nombre);
+        }});
 
         sorted.forEach(reg => {{
           if (normFilter && !reg.nombre.toLowerCase().includes(normFilter)) {{
             return;
           }}
 
+          const badgeSpecial = reg.id === 'vraem' ? ' <span style="font-size: 0.7rem; color: #92400E; background: #FEF3C7; border: 1px solid #F59E0B; padding: 1px 6px; border-radius: 4px; font-weight: 700;">Ámbito Especial</span>' : '';
+
           const tr = document.createElement('tr');
           tr.innerHTML = `
-            <td><strong>${{reg.nombre}}</strong></td>
+            <td><strong>${{reg.nombre}}</strong>${{badgeSpecial}}</td>
             <td style="text-align: center; font-weight: 700;">${{reg.total_empresas}}</td>
             <td style="text-align: center;">${{reg.eventos_unicos}}</td>
             <td style="text-align: center; color: #059669; font-weight: 700;">${{reg.cant_exportadoras}}</td>
@@ -1945,7 +1979,7 @@ html_content = f'''<!DOCTYPE html>
         const reg = regionsMap[currentRegionId];
         if (!reg) return;
 
-        const docxFileName = `Ayuda memoria de las atenciones de la Ruta Exportadora en ${{reg.nombre}} ${{reg.anio}}.docx`;
+        const docxFileName = `${{reg.titulo_documento || `Ayuda memoria de las atenciones de la Ruta Exportadora en ${{reg.nombre}} ${{reg.anio}}`}}.docx`;
 
         if (reg.docx_base64) {{
           const blob = base64ToBlob(reg.docx_base64, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');

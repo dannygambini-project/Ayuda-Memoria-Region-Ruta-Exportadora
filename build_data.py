@@ -93,18 +93,10 @@ df_cat = pd.read_excel('BD EMPRESAS CATEGORIZADAS AL 2025.xlsx')
 df_cat['RUC_STR'] = df_cat['RUC'].astype(str).str.strip()
 cat_map = dict(zip(df_cat['RUC_STR'], df_cat['CATEGORÍA 2025']))
 
-regions_data = {}
-anio_actual = 2026
-
-# Orden alfabético de regiones
-unique_regs = df_rutex['REGION'].dropna().unique()
-for reg_name in sorted(unique_regs, key=lambda x: normalizar_texto(x)):
-    reg_norm = normalizar_texto(reg_name)
-    df_rutex_reg = df_rutex[df_rutex['REGION_NORM'] == reg_norm].copy()
+def process_region(df_rutex_reg, oficial_name, reg_norm):
     if df_rutex_reg.empty:
-        continue
-    
-    oficial_name = df_rutex_reg['REGION'].iloc[0].strip().title()
+        return None
+
     rucs_region = set(df_rutex_reg['RUC'].dropna().astype(str).str.strip())
     total_empresas = len(rucs_region)
     
@@ -197,10 +189,17 @@ for reg_name in sorted(unique_regs, key=lambda x: normalizar_texto(x)):
         c = cat_map.get(r, 'Sin categoría')
         cats_count[c] = cats_count.get(c, 0) + 1
         
-    # Párrafo generado idéntico al notebook
+    # Párrafo generado
     monto_fob_display = f"{round(monto_fob_mill):,}"
+    if reg_norm == 'vraem':
+        intro_region = f"a {total_empresas} empresas del VRAEM (comprendiendo las regiones de Ayacucho, Cusco, Junín, Huancavelica y Apurímac)"
+        titulo_doc = f"Ayuda memoria de las atenciones de la Ruta Exportadora en el VRAEM {anio_actual}"
+    else:
+        intro_region = f"a {total_empresas} empresas de la región de {oficial_name}"
+        titulo_doc = f"Ayuda memoria de las atenciones de la Ruta Exportadora en {oficial_name} {anio_actual}"
+
     parrafo_1 = (
-        f"Durante el {anio_actual} se vienen atendiendo a {total_empresas} empresas de la región de {oficial_name}, "
+        f"Durante el {anio_actual} se vienen atendiendo {intro_region}, "
         f"a través de {eventos_unicos} actividades, {evt_lima} en Lima y {evt_regiones} en regiones. "
         f"Los principales sectores son {sectores_texto}. De las {total_empresas} empresas atendidas, "
         f"{cant_exportadoras} exportaron a {cant_mercados} mercados, {cant_productos} productos un monto de USD {monto_fob_display} millones, "
@@ -212,10 +211,10 @@ for reg_name in sorted(unique_regs, key=lambda x: normalizar_texto(x)):
     docx_b64 = base64.b64encode(docx_bytes).decode('utf-8')
 
     os.makedirs('documentos_word', exist_ok=True)
-    doc_path = os.path.join('documentos_word', f"Ayuda memoria de las atenciones de la Ruta Exportadora en {oficial_name} {anio_actual}.docx")
+    doc_path = os.path.join('documentos_word', f"{titulo_doc}.docx")
     doc_obj.save(doc_path)
 
-    regions_data[reg_norm] = {
+    return {
         'id': reg_norm,
         'nombre': oficial_name,
         'anio': anio_actual,
@@ -239,9 +238,29 @@ for reg_name in sorted(unique_regs, key=lambda x: normalizar_texto(x)):
         'categorias': cats_count,
         'parrafo_narrativa': parrafo_1,
         'parrafo_atenciones_header': header_atenciones,
-        'titulo_documento': f"Ayuda memoria de las atenciones de la Ruta Exportadora en {oficial_name} {anio_actual}",
+        'titulo_documento': titulo_doc,
         'docx_base64': docx_b64
     }
+
+regions_data = {}
+anio_actual = 2026
+
+# 1. Procesar las 25 regiones
+unique_regs = df_rutex['REGION'].dropna().unique()
+for reg_name in sorted(unique_regs, key=lambda x: normalizar_texto(x)):
+    reg_norm = normalizar_texto(reg_name)
+    df_rutex_reg = df_rutex[df_rutex['REGION_NORM'] == reg_norm].copy()
+    oficial_name = df_rutex_reg['REGION'].iloc[0].strip().title()
+    res = process_region(df_rutex_reg, oficial_name, reg_norm)
+    if res:
+        regions_data[reg_norm] = res
+
+# 2. Procesar categoría VRAEM (empresas únicas de Ayacucho, Cusco, Junín, Huancavelica y Apurímac)
+vraem_regions = ['ayacucho', 'cusco', 'junin', 'huancavelica', 'apurimac']
+df_rutex_vraem = df_rutex[df_rutex['REGION_NORM'].isin(vraem_regions)].copy()
+res_vraem = process_region(df_rutex_vraem, "VRAEM", "vraem")
+if res_vraem:
+    regions_data['vraem'] = res_vraem
 
 # Estadísticas globales del Perú (para resumen nacional comparativo)
 total_empresas_peru = len(set(df_rutex['RUC'].dropna().astype(str).str.strip()))

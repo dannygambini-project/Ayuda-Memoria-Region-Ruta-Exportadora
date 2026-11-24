@@ -2,7 +2,7 @@
 
 Plataforma analítica e interactiva con la **Ayuda Memoria de las atenciones de la Ruta Exportadora a nivel Regional (2026)**, desarrollada para la **Subdirección de Desarrollo Exportador de PROMPERÚ**.
 
-Consolida la información estratégica de las **25 regiones del Perú** (Amazonas, Áncash, Apurímac, Arequipa, Ayacucho, Cajamarca, Callao, Cusco, Huancavelica, Huánuco, Ica, Junín, La Libertad, Lambayeque, Lima, Loreto, Madre de Dios, Moquegua, Pasco, Piura, Puno, San Martín, Tacna, Tumbes y Ucayali).
+Consolida la información estratégica de las **25 regiones del Perú** (Amazonas, Áncash, Apurímac, Arequipa, Ayacucho, Cajamarca, Callao, Cusco, Huancavelica, Huánuco, Ica, Junín, La Libertad, Lambayeque, Lima, Loreto, Madre de Dios, Moquegua, Pasco, Piura, Puno, San Martín, Tacna, Tumbes y Ucayali) y el ámbito especial **VRAEM** (empresas únicas de Ayacucho, Cusco, Junín, Huancavelica y Apurímac).
 
 ---
 
