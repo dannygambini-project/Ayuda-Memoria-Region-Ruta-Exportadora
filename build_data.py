@@ -56,7 +56,16 @@ def create_regional_docx(region_nombre_oficial, anio_actual, parrafo_1, parrafo_
     return doc, buf.getvalue()
 
 print("Cargando bases de datos...")
-df_rutex = pd.read_excel('base rutex 03.11.2026 - Colab.xlsx')
+df_rutex = pd.read_excel('base rutex 24.11.2026 - Colab.xlsx')
+if df_rutex.shape[1] == 34 and 'Unnamed: 33' in df_rutex.columns:
+    df_rutex.columns = [
+        'RUC', 'RAZON SOCIAL', 'NOMBRE COMERCIAL', 'SECTOR', 'LINEA PRINCIPAL', 'LINEA SECUNDARIA',
+        'REGION', 'PROVINCIA', 'DISTRITO', 'DIRECCION', 'PRODUCTO', 'WEB',
+        'ID_CONTACTO',
+        'NOMBRES', 'APELLIDO', 'GENERO', 'CORREO', 'CELULAR', 'DOCUMENTO', 'CARGO',
+        'ESTADO_EVALUACION', 'EVENTO', 'APEX', 'REGION_EVENTO', 'FECHA INICIO', 'FECHA FIN',
+        'AÑO', 'nEveCodigo', 'TIPO EVENTO', 'TIP RUTA', 'AREA EVENTO', 'SUBDIRECCIÓN', 'SERVICIO', 'SUBCATEGORIA'
+    ]
 df_rutex['REGION_NORM'] = df_rutex['REGION'].apply(normalizar_texto)
 
 df_exp = pd.read_excel('EXPORTACIONES 2025.xlsx')
